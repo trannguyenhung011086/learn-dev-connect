@@ -14,7 +14,9 @@ const db = mongoose.connection;
 db.on("error", err =>
   console.error(`Error with database connection: ${err.message}`)
 )
-  .on("connected", () => console.info(`Connected to database ${db.host}`))
+  .on("connected", () =>
+    console.info(`Connected to database ${db.host}:${db.port}`)
+  )
   .on("disconnected", () =>
     console.info(`Disconnected to database ${db.host}`)
   );
