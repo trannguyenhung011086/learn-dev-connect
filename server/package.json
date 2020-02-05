@@ -1,0 +1,20 @@
+{
+  "name": "learn-dev-connect",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "NODE_ENV=production node ./server.js",
+    "dev": "NODE_ENV=development nodemon ./server.js"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "dotenv": "^8.2.0",
+    "express": "~4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.8.11",
+    "morgan": "~1.9.1"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0"
+  }
+}
