@@ -18,7 +18,7 @@ db.on("error", err =>
     console.info(`Connected to database ${db.host}:${db.port}`)
   )
   .on("disconnected", () =>
-    console.info(`Disconnected to database ${db.host}`)
+    console.info(`Disconnected to database ${db.host}:${db.port}`)
   );
 
 module.exports = db;

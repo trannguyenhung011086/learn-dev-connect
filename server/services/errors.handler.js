@@ -3,23 +3,41 @@ module.exports = {
     if (res.headersSent) {
       return next(err);
     }
-    if (err.name === "CastError") {
-      // return friendlier error message for casting
-    }
-    if (err.code === 11000 || err.code === 11001) {
-      // return friendlier error message for duplicated field
-    }
+
     const error = {
       status: err.status || 500,
-      type: err.name || "Unknown type",
-      message: err.message || err.reason || "Error with server",
-      stack: process.env.NODE_ENV === "development" ? err.stack : ""
+      message: err.message || err.reason || "Error with server"
     };
-    res.status(error.status).json({
-      type: error.type,
-      message: error.message,
-      stack: error.stack
-    });
+
+    if (err.name) {
+      error.type = err.name;
+    }
+    if (err.name === "ValidationError") {
+      error.message = [];
+      Object.keys(err.errors).forEach(errorName =>
+        error.message.push(err.errors[errorName].message)
+      );
+    }
+    if (err.name === "CastError") {
+      // return friendlier error message for Mongoose casting
+      const value = err.message.match(/(value.+)( at)/)[1];
+      error.message = `${value} is not a valid ObjectId`;
+    }
+    if (
+      (err.name === "MongoError" && err.code === 11000) ||
+      err.code === 11001
+    ) {
+      // return friendlier error message for Mongo duplicated field
+      const field = err.message.match(/(index: )(.+_)/)[2].replace("_", "");
+      error.message = `${field.charAt(0).toUpperCase() +
+        field.slice(1)} already exists`;
+    }
+
+    if (process.env.NODE_ENV === "development") {
+      error.stack = err.stack;
+    }
+
+    res.status(error.status).json(error);
   },
 
   notFound(req, res) {

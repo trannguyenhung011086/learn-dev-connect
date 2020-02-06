@@ -1,17 +1,25 @@
 const usersService = require("../services/users.service");
 
 module.exports = {
-  list(req, res, next) {
+  async list(req, res, next) {
     try {
-      res.send("TODO");
+      const { page, limit } = req.query;
+      const users = await usersService.getUsers({ page, limit });
+      res.status(200).json(users);
     } catch (err) {
       return next(err);
     }
   },
 
-  create(req, res, next) {
+  async create(req, res, next) {
     try {
-      res.send("TODO");
+      const { name, email, password } = req.body;
+      const user = await usersService.createUser({ name, email, password });
+      res.status(200).json({
+        id: user._id,
+        name: user.name,
+        email: user.email
+      });
     } catch (err) {
       return next(err);
     }
