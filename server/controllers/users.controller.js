@@ -40,16 +40,25 @@ module.exports = {
 
   read(req, res, next) {
     try {
-      const { password, ...user } = req.user.toObject();
+      const { password, salt, ...user } = req.user.toObject();
       res.status(200).json(user);
     } catch (err) {
       return next(err);
     }
   },
 
-  update(req, res, next) {
+  async update(req, res, next) {
     try {
-      res.send("TODO");
+      const { name, password } = req.body;
+      const user = await usersService.updateUser({
+        user: req.user,
+        update: { name, password }
+      });
+      res.status(200).json({
+        id: user._id,
+        name: user.name,
+        email: user.email
+      });
     } catch (err) {
       return next(err);
     }
@@ -57,7 +66,7 @@ module.exports = {
 
   delete(req, res, next) {
     try {
-      res.send("TODO");
+      res.status(403).json({ message: "Not allowed" });
     } catch (err) {
       return next(err);
     }
