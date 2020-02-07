@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const usersController = require("../controllers/users.controller");
+const { isLoggedIn, isCurrentUser } = require("../controllers/auth.controller");
 
 router
   .route("/")
@@ -10,9 +11,9 @@ router
 
 router
   .route("/:userId")
-  .get(usersController.read)
-  .put(usersController.update)
-  .delete(usersController.delete);
+  .get(isLoggedIn, isCurrentUser, usersController.read)
+  .put(isLoggedIn, isCurrentUser, usersController.update)
+  .delete(isLoggedIn, isCurrentUser, usersController.delete);
 
 router.param("userId", usersController.userById);
 

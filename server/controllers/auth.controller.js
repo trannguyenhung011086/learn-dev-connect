@@ -6,9 +6,10 @@ module.exports = {
       const { email, password } = req.body;
       const user = await authService.verifyUser({ email, password });
 
-      // imlement JWT
+      const payload = { id: user._id, name: user.name, email: user.email };
+      const token = authService.grantToken(payload);
 
-      res.status(200).json({ id: user._id });
+      res.status(200).json({ ...payload, token });
     } catch (err) {
       return next(err);
     }
@@ -16,7 +17,7 @@ module.exports = {
 
   logout(req, res, next) {
     try {
-      res.send("todo");
+      res.send("todo with redis blacklist method");
     } catch (err) {
       return next(err);
     }
@@ -28,5 +29,24 @@ module.exports = {
     } catch (err) {
       return next(err);
     }
+  },
+
+  isLoggedIn(req, res, next) {
+    try {
+      let token = authService.getTokenFromHeaders(req.headers);
+      token = authService.verifyToken(token);
+      req.profile = token;
+      next();
+    } catch (err) {
+      return next(err);
+    }
+  },
+
+  isCurrentUser(req, res, next) {
+    console.log(req.profile, req.user);
+    if (req.profile.id !== req.user._id.toString()) {
+      throw { status: 403, message: "Current user does not match" };
+    }
+    next();
   }
 };

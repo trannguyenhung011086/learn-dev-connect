@@ -43,5 +43,9 @@ module.exports = {
     }
     user.updated = Date.now();
     return await user.save();
+  },
+
+  async deleteUser(user) {
+    await User.deleteOne({ _id: user._id }).exec();
   }
 };

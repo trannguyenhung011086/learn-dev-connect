@@ -64,9 +64,10 @@ module.exports = {
     }
   },
 
-  delete(req, res, next) {
+  async delete(req, res, next) {
     try {
-      res.status(403).json({ message: "Not allowed" });
+      await usersService.deleteUser(req.user);
+      res.status(200).json({ deleted: true });
     } catch (err) {
       return next(err);
     }
