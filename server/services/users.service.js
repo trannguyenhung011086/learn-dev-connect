@@ -1,4 +1,5 @@
 const User = require("../models/user.model");
+const authHelper = require("../helpers/auth.helper");
 
 module.exports = {
   async getUserById(id) {
@@ -30,7 +31,10 @@ module.exports = {
   },
 
   async createUser(data) {
+    const { email } = data;
+    const avatar = await authHelper.genAvatar({ email });
     const user = new User(data);
+    user.avatar = avatar;
     return await user.save();
   },
 

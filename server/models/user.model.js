@@ -13,6 +13,7 @@ const UserSchema = new mongoose.Schema({
     unique: true,
     index: true,
     trim: true,
+    lowercase: true,
     validate: {
       validator: v => /.+@.+\..+/.test(v),
       message: props => `Email ${props.value} is not valid`

@@ -1,4 +1,5 @@
 const crypto = require("crypto");
+const axios = require("axios").default;
 
 module.exports = {
   genSalt() {
@@ -14,5 +15,17 @@ module.exports = {
   verifyPassword(password, originalHash, salt) {
     const hash = this.hashPassword(password, salt);
     return hash === originalHash;
+  },
+
+  async genAvatar({ email, size = 200 }) {
+    const hash = crypto
+      .createHash("md5")
+      .update(email)
+      .digest("hex");
+    return await axios
+      .get(`https://www.gravatar.com/${hash}.json`)
+      .then(res => {
+        return res.data.entry[0].thumbnailUrl + `?s=${size}`;
+      });
   }
 };
