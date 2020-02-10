@@ -31,6 +31,8 @@ module.exports = {
       if (!user) {
         throw { status: 400, message: "User not found" };
       }
+      user.password = undefined;
+      user.salt = undefined;
       req.user = user;
       next();
     } catch (err) {

@@ -11,7 +11,7 @@ router
 
 router
   .route("/:userId")
-  .get(isLoggedIn, isCurrentUser, usersController.read)
+  .get(isLoggedIn, usersController.read)
   .put(isLoggedIn, isCurrentUser, usersController.update)
   .delete(isLoggedIn, isCurrentUser, usersController.delete);
 

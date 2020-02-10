@@ -43,7 +43,6 @@ module.exports = {
   },
 
   isCurrentUser(req, res, next) {
-    console.log(req.profile, req.user);
     if (req.profile.id !== req.user._id.toString()) {
       throw { status: 403, message: "Current user does not match" };
     }

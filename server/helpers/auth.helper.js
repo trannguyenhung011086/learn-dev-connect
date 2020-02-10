@@ -24,8 +24,10 @@ module.exports = {
       .digest("hex");
     return await axios
       .get(`https://www.gravatar.com/${hash}.json`)
-      .then(res => {
-        return res.data.entry[0].thumbnailUrl + `?s=${size}`;
+      .then(res => res.data.entry[0].thumbnailUrl + `?s=${size}`)
+      .catch(err => {
+        console.error(`Error with gravatar: ` + err.message);
+        return `https://www.gravatar.com/avatar/${hash}?s=${size}`;
       });
   }
 };
