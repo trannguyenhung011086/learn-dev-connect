@@ -20,7 +20,7 @@ module.exports = {
     if (!payload) {
       throw { status: 400, message: "Payload is required" };
     }
-    return jwt.sign(payload, config.jwtSecret, { expiresIn: "15m" });
+    return jwt.sign(payload, config.jwtSecret, { expiresIn: config.jwtExpire });
   },
 
   verifyToken(token) {

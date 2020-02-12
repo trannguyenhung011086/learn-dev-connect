@@ -14,6 +14,7 @@ module.exports = {
     }
 
     if (err.name === "ValidationError") {
+      error.status = 400;
       error.message = [];
       Object.keys(err.errors).forEach(errorName =>
         error.message.push(err.errors[errorName].message)
