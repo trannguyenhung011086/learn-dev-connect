@@ -31,11 +31,15 @@ module.exports = {
     }
   },
 
-  isLoggedIn(req, res, next) {
+  async isLoggedIn(req, res, next) {
     try {
-      let token = authService.getTokenFromHeaders(req.headers);
-      token = authService.verifyToken(token);
-      req.profile = token;
+      const token = authService.getTokenFromHeaders(req.headers);
+      await authService.checkBlacklistToken(token);
+
+      const decoded = authService.verifyToken(token);
+      req.profile = decoded;
+      req.profile.token = token;
+
       next();
     } catch (err) {
       return next(err);

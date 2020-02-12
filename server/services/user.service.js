@@ -1,5 +1,5 @@
 const User = require("../models/user.model");
-const authHelper = require("../helpers/auth.helper");
+const profileService = require("./profile.service");
 
 module.exports = {
   async getUserById(id) {
@@ -32,7 +32,10 @@ module.exports = {
 
   async createUser(data) {
     const { email } = data;
-    const avatar = await authHelper.genAvatar({ email });
+
+    const { genAvatar } = require("../helpers/auth.helper");
+    const avatar = await genAvatar({ email });
+
     const user = new User(data);
     user.avatar = avatar;
     return await user.save();
@@ -49,7 +52,15 @@ module.exports = {
     return await user.save();
   },
 
-  async deleteUser(user) {
+  async deleteUser({ user, profile }) {
+    const userProfile = await profileService.getProfile({ userId: user._id });
+    if (userProfile) {
+      await profileService.deleteProfile(userProfile);
+    }
+
     await User.deleteOne({ _id: user._id }).exec();
+
+    const { blacklistToken } = require("./auth.service");
+    blacklistToken(profile.token);
   }
 };

@@ -7,9 +7,19 @@ module.exports = {
         userId: req.profile.id
       });
       if (!profile) {
-        throw { status: 404, message: "User has no profile" };
+        throw { status: 400, message: "User has no profile" };
       }
       res.status(200).json(profile);
+    } catch (err) {
+      return next(err);
+    }
+  },
+
+  async list(req, res, next) {
+    try {
+      const { page, limit } = req.query;
+      const profiles = await profileService.getProfiles({ page, limit });
+      res.status(200).json({ data: profiles });
     } catch (err) {
       return next(err);
     }
@@ -61,6 +71,19 @@ module.exports = {
       const profile = await profileService.getProfile({ profileId: id });
       if (!profile) {
         throw { status: 400, message: "Profile not found" };
+      }
+      req.profileData = profile;
+      next();
+    } catch (err) {
+      return next(err);
+    }
+  },
+
+  async profileByUserId(req, res, next, id) {
+    try {
+      const profile = await profileService.getProfile({ userId: id });
+      if (!profile) {
+        throw { status: 400, message: "Profile not found for user" };
       }
       req.profileData = profile;
       next();

@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use("/", require("./routes/index.route"));
-app.use("/users", require("./routes/users.route"));
+app.use("/users", require("./routes/user.route"));
 app.use("/auth", require("./routes/auth.route"));
 app.use("/profile", require("./routes/profile.route"));
 

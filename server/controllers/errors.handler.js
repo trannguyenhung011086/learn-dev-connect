@@ -22,7 +22,7 @@ module.exports = {
     }
     if (err.name === "CastError") {
       const value = err.message.match(/(value.+)( at)/)[1];
-      error.message = `${value} is not a valid ObjectId`;
+      error.message = `${value} is not valid`;
     }
     if (
       (err.name === "MongoError" && err.code === 11000) ||

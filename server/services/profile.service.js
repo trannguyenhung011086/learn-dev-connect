@@ -19,6 +19,17 @@ module.exports = {
     return profile;
   },
 
+  async getProfiles({ query = {}, page = 1, limit = 10 }) {
+    page = parseInt(page);
+    limit = parseInt(limit);
+
+    return await Profile.find(query)
+      .populate("user", "name email avatar")
+      .skip(page > 0 ? (page - 1) * limit : 0)
+      .limit(limit)
+      .exec();
+  },
+
   async createProfile(data) {
     const found = await this.getProfile({ userId: data.user });
     if (found) {

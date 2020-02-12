@@ -1,11 +1,13 @@
 const jwt = require("jsonwebtoken");
+const redis = require("../redis");
 const config = require("../config");
+
 const authHelper = require("../helpers/auth.helper");
-const usersService = require("../services/users.service");
 
 module.exports = {
   async verifyUser({ email, password }) {
-    const user = await usersService.getUserByEmail(email);
+    const { getUserByEmail } = require("./user.service");
+    const user = await getUserByEmail(email);
     if (!user) {
       throw { status: 400, message: "User does not exist" };
     }
@@ -39,5 +41,18 @@ module.exports = {
       throw { status: 401, message: "Token is missing" };
     }
     return token;
+  },
+
+  blacklistToken(token) {
+    redis.set(token, "blacklist", "PX", config.jwtExpire);
+  },
+
+  async checkBlacklistToken(token) {
+    const { promisify } = require("util");
+    const getAsync = promisify(redis.get).bind(redis);
+    const value = await getAsync(token);
+    if (value) {
+      throw { status: 403, message: "Token cannot be used" };
+    }
   }
 };

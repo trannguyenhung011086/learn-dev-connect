@@ -1,10 +1,10 @@
-const usersService = require("../services/users.service");
+const userService = require("../services/user.service");
 
 module.exports = {
   async list(req, res, next) {
     try {
       const { page, limit } = req.query;
-      const users = await usersService.getUsers({ page, limit });
+      const users = await userService.getUsers({ page, limit });
       res.status(200).json(users);
     } catch (err) {
       return next(err);
@@ -14,7 +14,7 @@ module.exports = {
   async create(req, res, next) {
     try {
       const { name, email, password } = req.body;
-      const user = await usersService.createUser({ name, email, password });
+      const user = await userService.createUser({ name, email, password });
       res.status(200).json({
         id: user._id,
         name: user.name,
@@ -27,7 +27,7 @@ module.exports = {
 
   async userById(req, res, next, id) {
     try {
-      const user = await usersService.getUserById(id);
+      const user = await userService.getUserById(id);
       if (!user) {
         throw { status: 400, message: "User not found" };
       }
@@ -52,7 +52,7 @@ module.exports = {
   async update(req, res, next) {
     try {
       const { name, password } = req.body;
-      const user = await usersService.updateUser({
+      const user = await userService.updateUser({
         user: req.user,
         update: { name, password }
       });
@@ -68,7 +68,7 @@ module.exports = {
 
   async delete(req, res, next) {
     try {
-      await usersService.deleteUser(req.user);
+      await userService.deleteUser({ user: req.user, profile: req.profile });
       res.status(200).json({ deleted: true });
     } catch (err) {
       return next(err);

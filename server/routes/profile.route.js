@@ -6,7 +6,10 @@ const { isLoggedIn, isCurrentUser } = require("../controllers/auth.controller");
 
 router.get("/me", isLoggedIn, profileController.current);
 
-router.post("/", isLoggedIn, profileController.create);
+router
+  .route("/")
+  .get(profileController.list)
+  .post(isLoggedIn, profileController.create);
 
 router
   .route("/:profileId")
@@ -15,5 +18,9 @@ router
   .delete(isLoggedIn, isCurrentUser, profileController.delete);
 
 router.param("profileId", profileController.profileById);
+
+router.route("/user/:userId").get(profileController.read);
+
+router.param("userId", profileController.profileByUserId);
 
 module.exports = router;
