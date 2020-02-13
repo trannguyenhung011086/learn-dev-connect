@@ -63,5 +63,6 @@ PostSchema.virtual("commentsCount").get(function() {
 });
 
 PostSchema.set("toObject", { getters: true });
+PostSchema.set("toJSON", { getters: true });
 
 module.exports = mongoose.model("Post", PostSchema);
