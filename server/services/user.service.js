@@ -53,13 +53,18 @@ module.exports = {
   },
 
   async deleteUser({ user, profile }) {
+    // todo: remove posts of user
+
+    // remove profile
     const userProfile = await profileService.getProfile({ userId: user._id });
     if (userProfile) {
       await profileService.deleteProfile(userProfile);
     }
 
+    // remove user
     await User.deleteOne({ _id: user._id }).exec();
 
+    // invalidate jwt token
     const { blacklistToken } = require("./auth.service");
     blacklistToken(profile.token);
   }

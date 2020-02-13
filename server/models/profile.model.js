@@ -35,7 +35,15 @@ const ProfileSchema = new mongoose.Schema({
       },
       location: String,
       from: Date,
-      to: Date,
+      to: {
+        type: Date,
+        validate: [
+          function(value) {
+            return value.getTime() > this.from.getTime();
+          },
+          "To date must be later than From date"
+        ]
+      },
       current: {
         type: Boolean,
         default: false
@@ -58,7 +66,15 @@ const ProfileSchema = new mongoose.Schema({
         required: [true, "Field of Study is required"]
       },
       from: Date,
-      to: Date,
+      to: {
+        type: Date,
+        validate: [
+          function(value) {
+            return value.getTime() > this.from.getTime();
+          },
+          "To date must be later than From date"
+        ]
+      },
       current: {
         type: Boolean,
         default: false

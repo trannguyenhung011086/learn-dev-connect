@@ -70,7 +70,7 @@ module.exports = {
     try {
       const profile = await profileService.getProfile({ profileId: id });
       if (!profile) {
-        throw { status: 400, message: "Profile not found" };
+        throw { status: 404, message: "Profile not found" };
       }
       req.profileData = profile;
       next();
@@ -82,9 +82,6 @@ module.exports = {
   async profileByUserId(req, res, next, id) {
     try {
       const profile = await profileService.getProfile({ userId: id });
-      if (!profile) {
-        throw { status: 400, message: "Profile not found for user" };
-      }
       req.profileData = profile;
       next();
     } catch (err) {
@@ -94,7 +91,13 @@ module.exports = {
 
   read(req, res, next) {
     try {
-      res.status(200).json({ data: req.profileData.toObject() });
+      res
+        .status(200)
+        .json({
+          data: req.profileData
+            ? req.profileData.toObject()
+            : "User has no profile"
+        });
     } catch (err) {
       return next(err);
     }

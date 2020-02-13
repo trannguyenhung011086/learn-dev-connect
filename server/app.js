@@ -14,7 +14,8 @@ app.use(cookieParser());
 app.use("/", require("./routes/index.route"));
 app.use("/users", require("./routes/user.route"));
 app.use("/auth", require("./routes/auth.route"));
-app.use("/profile", require("./routes/profile.route"));
+app.use("/profiles", require("./routes/profile.route"));
+app.use("/posts", require("./routes/post.route"));
 
 app.use("*", errorsHandler.notFound);
 app.use(errorsHandler.process);

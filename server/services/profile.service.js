@@ -40,9 +40,13 @@ module.exports = {
   },
 
   async updateProfile({ profile, update }) {
+    if (update.user && update.user !== profile.user._id.toString()) {
+      throw { status: 400, message: "Current user does not match" };
+    }
     Object.keys(update).forEach(
       updateField => (profile[updateField] = update[updateField])
     );
+    profile.updated = Date.now();
     return await profile.save();
   },
 

@@ -29,7 +29,7 @@ module.exports = {
     try {
       const user = await userService.getUserById(id);
       if (!user) {
-        throw { status: 400, message: "User not found" };
+        throw { status: 404, message: "User not found" };
       }
       user.password = undefined;
       user.salt = undefined;
