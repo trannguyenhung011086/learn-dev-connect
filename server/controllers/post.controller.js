@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const postService = require("../services/post.service");
+const commentService = require("../services/comment.service");
 
 module.exports = {
   async list(req, res, next) {
@@ -27,12 +28,11 @@ module.exports = {
 
   async create(req, res, next) {
     try {
-      const { user, text, name, avatar, likes, comments } = req.body;
-      if (user && req.profile.id !== user) {
-        throw { status: 400, message: "User does not match" };
-      }
-      const postData = { user, text, name, avatar, likes, comments };
-      const post = await postService.createPost(postData);
+      const { text, name } = req.body;
+      const post = await postService.createPost({
+        postData: { text, name },
+        profile: req.profile
+      });
       res.status(200).json({ data: post });
     } catch (err) {
       return next(err);
@@ -62,9 +62,11 @@ module.exports = {
 
   async update(req, res, next) {
     try {
+      const { text, name } = req.body;
       const newPost = await postService.updatePost({
         post: req.post,
-        update: req.body
+        update: { text, name },
+        profile: req.profile
       });
       res.status(200).json({ data: newPost });
     } catch (err) {
@@ -74,8 +76,74 @@ module.exports = {
 
   async delete(req, res, next) {
     try {
-      await postService.deletePost(req.post);
+      await postService.deletePost({ post: req.post, profile: req.profile });
       res.status(200).json({ deleted: true });
+    } catch (err) {
+      return next(err);
+    }
+  },
+
+  async like(req, res, next) {
+    try {
+      const data = await postService.addLike({
+        post: req.post,
+        profile: req.profile
+      });
+      res.status(200).json(data);
+    } catch (err) {
+      return next(err);
+    }
+  },
+
+  async unlike(req, res, next) {
+    try {
+      const data = await postService.removeLike({
+        post: req.post,
+        profile: req.profile
+      });
+      res.status(200).json(data);
+    } catch (err) {
+      return next(err);
+    }
+  },
+
+  async comment(req, res, next) {
+    try {
+      const { text, name } = req.body;
+      const data = await commentService.addComment({
+        post: req.post,
+        profile: req.profile,
+        content: { text, name }
+      });
+      res.status(200).json(data);
+    } catch (err) {
+      return next(err);
+    }
+  },
+
+  async removeComment(req, res, next) {
+    try {
+      await commentService.removeComment({
+        post: req.post,
+        profile: req.profile,
+        commentId: req.params.commentId
+      });
+      res.status(200).json({ deleted: true });
+    } catch (err) {
+      return next(err);
+    }
+  },
+
+  async modifyComment(req, res, next) {
+    try {
+      const { text, name } = req.body;
+      const data = await commentService.updateComment({
+        post: req.post,
+        profile: req.profile,
+        commentId: req.params.commentId,
+        update: { text, name }
+      });
+      res.status(200).json(data);
     } catch (err) {
       return next(err);
     }

@@ -16,7 +16,8 @@ const PostSchema = new mongoose.Schema({
     {
       user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
+        ref: "User",
+        required: [true, "User is required"]
       },
       created: {
         type: Date,
@@ -24,27 +25,7 @@ const PostSchema = new mongoose.Schema({
       }
     }
   ],
-  comments: [
-    {
-      user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
-      },
-      text: {
-        type: String,
-        require: [true, "Text is required"]
-      },
-      name: String,
-      avatar: String,
-      created: {
-        type: Date,
-        default: Date.now
-      },
-      updated: {
-        type: Date
-      }
-    }
-  ],
+  comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
   created: {
     type: Date,
     default: Date.now

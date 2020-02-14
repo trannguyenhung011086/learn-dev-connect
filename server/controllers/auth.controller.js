@@ -6,7 +6,12 @@ module.exports = {
       const { email, password } = req.body;
       const user = await authService.verifyUser({ email, password });
 
-      const payload = { id: user._id, name: user.name, email: user.email };
+      const payload = {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        avatar: user.avatar
+      };
       const token = authService.grantToken(payload);
 
       res.status(200).json({ ...payload, token });
