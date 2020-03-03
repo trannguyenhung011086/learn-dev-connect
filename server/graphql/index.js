@@ -12,7 +12,8 @@ const mutationType = new GraphQLObjectType({
   name: "Mutation",
   description: "API to add data",
   fields: () => ({
-    signUp: require("./mutation/createUser")
+    signUp: require("./mutation/createUser"),
+    logIn: require("./mutation/logIn")
     // post: require("./mutation/createPost")
   })
 });
