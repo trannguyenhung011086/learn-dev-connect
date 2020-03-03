@@ -1,6 +1,6 @@
 const { GraphQLSchema, GraphQLObjectType } = require("graphql");
 
-const queryType = new GraphQLObjectType({
+const query = new GraphQLObjectType({
   name: "Query",
   description: "API to get data",
   fields: () => ({
@@ -8,19 +8,14 @@ const queryType = new GraphQLObjectType({
   })
 });
 
-const mutationType = new GraphQLObjectType({
+const mutation = new GraphQLObjectType({
   name: "Mutation",
   description: "API to add data",
   fields: () => ({
     signUp: require("./mutation/createUser"),
-    logIn: require("./mutation/logIn")
-    // post: require("./mutation/createPost")
+    logIn: require("./mutation/logIn"),
+    post: require("./mutation/createPost")
   })
 });
 
-const schema = new GraphQLSchema({
-  query: queryType,
-  mutation: mutationType
-});
-
-module.exports = schema;
+module.exports = new GraphQLSchema({ query, mutation });

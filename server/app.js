@@ -19,7 +19,14 @@ app.use("/auth", require("./routes/auth.route"));
 app.use("/profiles", require("./routes/profile.route"));
 app.use("/posts", require("./routes/post.route"));
 
-app.use("/graphql", graphqlHTTP({ schema, graphiql: true }));
+app.use(
+  "/graphql",
+  graphqlHTTP(req => ({
+    schema,
+    graphiql: true,
+    context: { request: req }
+  }))
+);
 
 app.use("*", errorsHandler.notFound);
 app.use(errorsHandler.process);
