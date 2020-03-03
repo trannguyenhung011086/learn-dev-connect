@@ -12,13 +12,14 @@ const mutationType = new GraphQLObjectType({
   name: "Mutation",
   description: "API to add data",
   fields: () => ({
-    post: require("./mutation/createPost")
+    signUp: require("./mutation/createUser")
+    // post: require("./mutation/createPost")
   })
 });
 
 const schema = new GraphQLSchema({
-  query: queryType
-  // mutation: mutationType
+  query: queryType,
+  mutation: mutationType
 });
 
 module.exports = schema;
