@@ -49,6 +49,9 @@ module.exports = {
     if (!update.text) {
       throw { status: 400, message: "Text is required" };
     }
+    if (!post) {
+      throw { status: 400, message: "Post is not found" };
+    }
     if (profile.id !== post.user._id.toString()) {
       throw { status: 400, message: "User does not own this post" };
     }
@@ -70,7 +73,7 @@ module.exports = {
     const originalCount = post.likesCount;
     post.likes.push({ user: post.user._id });
     const updated = await post.save();
-    return { originalCount, newCount: updated.likesCount };
+    return { originalCount, newCount: updated.likesCount, updated };
   },
 
   async removeLike({ post, profile }) {
@@ -86,7 +89,7 @@ module.exports = {
     );
     post.likes = newLikes;
     const updated = await post.save();
-    return { originalCount, newCount: updated.likesCount };
+    return { originalCount, newCount: updated.likesCount, updated };
   },
 
   async deletePost({ post, profile }) {

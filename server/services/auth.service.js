@@ -54,5 +54,12 @@ module.exports = {
     if (value) {
       throw { status: 403, message: "Token cannot be used" };
     }
+  },
+
+  async verifyLogIn(headers) {
+    const token = this.getTokenFromHeaders(headers);
+    await this.checkBlacklistToken(token);
+    const decoded = this.verifyToken(token);
+    return decoded;
   }
 };
