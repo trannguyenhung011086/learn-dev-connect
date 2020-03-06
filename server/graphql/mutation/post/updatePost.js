@@ -1,9 +1,9 @@
 const { GraphQLInputObjectType, GraphQLString, GraphQLID } = require("graphql");
 
-const { getPost, updatePost } = require("../../services/post.service");
-const { verifyLogIn } = require("../../services/auth.service");
+const { getPost, updatePost } = require("../../../services/post.service");
+const { verifyLogIn } = require("../../../services/auth.service");
 
-const postType = require("../types/post");
+const postType = require("../../types/post");
 
 module.exports = {
   type: postType,

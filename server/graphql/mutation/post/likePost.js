@@ -1,21 +1,21 @@
 const { GraphQLInputObjectType, GraphQLID } = require("graphql");
 
-const { getPost, removeLike } = require("../../services/post.service");
-const { verifyLogIn } = require("../../services/auth.service");
+const { getPost, addLike } = require("../../../services/post.service");
+const { verifyLogIn } = require("../../../services/auth.service");
 
-const postType = require("../types/post");
+const postType = require("../../types/post");
 
 module.exports = {
   type: postType,
-  description: "Remove like from post",
+  description: "Add like to post",
   args: {
     input: {
       type: new GraphQLInputObjectType({
-        name: "PostUnlikeInput",
+        name: "PostLikeInput",
         fields: {
           postId: { type: GraphQLID }
         },
-        description: "Input data to remove like from post"
+        description: "Input data to like post"
       })
     }
   },
@@ -23,7 +23,7 @@ module.exports = {
     const profile = await verifyLogIn(request.headers);
     const { postId } = input;
     const post = await getPost({ postId });
-    const result = await removeLike({ post, profile });
+    const result = await addLike({ post, profile });
     return result.updated;
   }
 };

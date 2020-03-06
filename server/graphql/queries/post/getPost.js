@@ -1,8 +1,8 @@
-const { GraphQLID, GraphQLList } = require("graphql");
+const { GraphQLID } = require("graphql");
 
-const { getPost } = require("../../services/post.service");
+const { getPost } = require("../../../services/post.service");
 
-const postType = require("../types/post");
+const postType = require("../../types/post");
 
 module.exports = {
   type: postType,

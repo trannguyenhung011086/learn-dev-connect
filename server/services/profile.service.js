@@ -40,6 +40,9 @@ module.exports = {
   },
 
   async updateProfile({ profile, update }) {
+    if (!profile) {
+      throw { status: 400, message: "Profile is not found" };
+    }
     if (update.user && update.user !== profile.user._id.toString()) {
       throw { status: 400, message: "Current user does not match" };
     }
@@ -51,6 +54,9 @@ module.exports = {
   },
 
   async deleteProfile(profile) {
+    if (!profile) {
+      throw { status: 400, message: "Profile is not found" };
+    }
     return await Profile.deleteOne({ _id: profile._id }).exec();
   }
 };

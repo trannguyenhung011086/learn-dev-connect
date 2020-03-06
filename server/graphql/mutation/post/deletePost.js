@@ -4,8 +4,8 @@ const {
   GraphQLBoolean
 } = require("graphql");
 
-const { getPost, deletePost } = require("../../services/post.service");
-const { verifyLogIn } = require("../../services/auth.service");
+const { getPost, deletePost } = require("../../../services/post.service");
+const { verifyLogIn } = require("../../../services/auth.service");
 
 module.exports = {
   type: GraphQLBoolean,
